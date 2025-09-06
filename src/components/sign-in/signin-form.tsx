@@ -7,7 +7,9 @@ import { OAuthButtons } from "@/components/oauth-button";
 import { ErrorSuccessMessages } from "@/components/error-success-messages";
 import { z } from "zod";
 import { OAuthStrategy } from "@clerk/types";
+import { ClerkAPIError } from "@clerk/types";
 import { PasswordInput } from "../ui/password-input";
+import Link from "next/link";
 
 interface SignInFormProps {
   email: string;
@@ -15,7 +17,8 @@ interface SignInFormProps {
   password: string;
   setPassword: (v: string) => void;
   isSubmitting: boolean;
-  errors?: any[];
+  errors?: ClerkAPIError[];
+  setErrors?: (errors?: ClerkAPIError[] | undefined) => void;
   handleSubmit: (e: React.FormEvent) => void;
   signInWith: (provider: OAuthStrategy) => void;
   forgotPasswordCode: (email: string) => void;
@@ -28,11 +31,12 @@ export function SignInForm({
   setPassword,
   isSubmitting,
   errors,
+  setErrors,
   handleSubmit,
   signInWith,
   forgotPasswordCode,
 }: SignInFormProps) {
-  const [localErrors, setLocalErrors] = React.useState<any[]>([]);
+  // Use central errors via props.setErrors when available
 
   // Zod schemas
   const loginSchema = z.object({
@@ -48,15 +52,16 @@ export function SignInForm({
   // Validate login before submit
   const handleValidatedSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalErrors([]);
+    setErrors && setErrors(undefined);
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
-      setLocalErrors(
-        result.error.issues.map((err: { message: string }) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      setErrors &&
+        setErrors(
+          result.error.issues.map((err: { message: string }) => ({
+            code: "validation_error",
+            message: err.message,
+          }))
+        );
       return;
     }
     handleSubmit(e);
@@ -64,22 +69,23 @@ export function SignInForm({
 
   // Validate email before forgot password
   const handleForgotPassword = () => {
-    setLocalErrors([]);
+    setErrors && setErrors(undefined);
     const result = emailSchema.safeParse(email);
     if (!result.success) {
-      setLocalErrors(
-        result.error.issues.map((err: { message: string }) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      setErrors &&
+        setErrors(
+          result.error.issues.map((err: { message: string }) => ({
+            code: "validation_error",
+            message: err.message,
+          }))
+        );
       return;
     }
     forgotPasswordCode(email);
   };
 
   // Combine local validation errors and remote errors
-  const allErrors = [...(localErrors || []), ...(errors || [])];
+  const allErrors = [...(errors || [])];
 
   return (
     <form onSubmit={handleValidatedSubmit}>
@@ -108,7 +114,7 @@ export function SignInForm({
                 Forgot your password?
               </button>
             </div>
-            <PasswordInput />
+            <PasswordInput onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="flex flex-col gap-3">
             <Button
@@ -133,9 +139,9 @@ export function SignInForm({
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
-          <a href="/sign-up" className="underline underline-offset-4">
+          <Link href="/sign-up" className="underline underline-offset-4">
             Sign up
-          </a>
+          </Link>
         </div>
       </>
     </form>

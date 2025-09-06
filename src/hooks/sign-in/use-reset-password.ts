@@ -2,6 +2,7 @@ import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/dist/client/components/navigation";
 import { useState } from "react";
 import { formatError } from "@/hooks/use-error-message";
+import { ClerkAPIError } from "@clerk/types";
 
 export function useResetPassword() {
   const { signIn, setActive } = useSignIn();
@@ -19,7 +20,7 @@ export function useResetPassword() {
         identifier: email,
       });
       setSuccessfulCreation(true);
-    } catch (err: any) {
+    } catch (err: ClerkAPIError | unknown) {
       setError(formatError(err));
     }
   }

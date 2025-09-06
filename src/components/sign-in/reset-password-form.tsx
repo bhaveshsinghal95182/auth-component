@@ -11,7 +11,6 @@ export function ResetPasswordForm() {
   const [code, setCode] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [localErrors, setLocalErrors] = React.useState<any[]>([]);
   const { error, successfulCreation, sendCode, resetPassword, setError } =
     useResetPassword();
 
@@ -37,15 +36,11 @@ export function ResetPasswordForm() {
   // Step 1: Send code
   const handleSendCode = (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalErrors([]);
+    setError("");
     const result = emailSchema.safeParse(email);
     if (!result.success) {
-      setLocalErrors(
-        result.error.issues.map((err) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      const message = result.error.issues.map((err) => err.message).join(" ");
+      setError(message);
       return;
     }
     sendCode(email);
@@ -54,38 +49,25 @@ export function ResetPasswordForm() {
   // Step 2: Reset password
   const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalErrors([]);
+    setError("");
     const codeResult = codeSchema.safeParse(code);
     const passResult = passwordSchema.safeParse({ password, confirmPassword });
-    let errors: any[] = [];
+    const messages: string[] = [];
     if (!codeResult.success) {
-      errors = errors.concat(
-        codeResult.error.issues.map((err) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      messages.push(...codeResult.error.issues.map((i) => i.message));
     }
     if (!passResult.success) {
-      errors = errors.concat(
-        passResult.error.issues.map((err) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      messages.push(...passResult.error.issues.map((i) => i.message));
     }
-    if (errors.length > 0) {
-      setLocalErrors(errors);
+    if (messages.length > 0) {
+      setError(messages.join(" "));
       return;
     }
     resetPassword(code, password);
   };
 
   // Combine errors
-  const allErrors = [
-    ...(localErrors || []),
-    ...(error ? [{ code: "api_error", message: error }] : []),
-  ];
+  const allErrors = [...(error ? [{ code: "api_error", message: error }] : [])];
 
   return (
     <div className="w-full max-w-sm mx-auto mt-10">

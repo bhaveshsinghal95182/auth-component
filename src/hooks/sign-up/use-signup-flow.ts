@@ -2,6 +2,7 @@ import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { formatError } from "@/hooks/use-error-message";
+import { ClerkAPIError } from "@clerk/types";
 
 export function useSignUpHandlers() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -17,7 +18,7 @@ export function useSignUpHandlers() {
       await signUp.create({ emailAddress, password });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setVerifying(true);
-    } catch (err: any) {
+    } catch (err: ClerkAPIError | unknown) {
       setError(formatError(err));
     }
   }
@@ -44,7 +45,7 @@ export function useSignUpHandlers() {
       } else {
         setError("Verification not complete. Further steps may be required.");
       }
-    } catch (err: any) {
+    } catch (err: ClerkAPIError | unknown) {
       setError(formatError(err));
     }
   }

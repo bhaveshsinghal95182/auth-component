@@ -8,12 +8,12 @@ import { z } from "zod";
 import { OAuthButtons } from "../oauth-button";
 import { useSignInHandlers } from "@/hooks/sign-in/use-sign-in";
 import { PasswordInput } from "../ui/password-input";
+import Link from "next/link";
 
 export function SignUpForm() {
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [code, setCode] = React.useState("");
-  const [localErrors, setLocalErrors] = React.useState<any[]>([]);
   const { error, verifying, signUpWithEmail, verifyCode, setError } =
     useSignUpHandlers();
   const { signInWith } = useSignInHandlers();
@@ -32,15 +32,13 @@ export function SignUpForm() {
   // Step 1: Sign up
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalErrors([]);
+    // Clear previous errors
+    setError("");
     const result = signupSchema.safeParse({ emailAddress, password });
     if (!result.success) {
-      setLocalErrors(
-        result.error.issues.map((err) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      // Use the shared setError to display validation messages consistently
+      const message = result.error.issues.map((err) => err.message).join(" ");
+      setError(message);
       return;
     }
     signUpWithEmail(emailAddress, password);
@@ -49,25 +47,18 @@ export function SignUpForm() {
   // Step 2: Verify code
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalErrors([]);
+    setError("");
     const result = codeSchema.safeParse(code);
     if (!result.success) {
-      setLocalErrors(
-        result.error.issues.map((err) => ({
-          code: "validation_error",
-          message: err.message,
-        }))
-      );
+      const message = result.error.issues.map((err) => err.message).join(" ");
+      setError(message);
       return;
     }
     verifyCode(code);
   };
 
   // Combine errors
-  const allErrors = [
-    ...(localErrors || []),
-    ...(error ? [{ code: "api_error", message: error }] : []),
-  ];
+  const allErrors = [...(error ? [{ code: "api_error", message: error }] : [])];
 
   return (
     <div className="w-full max-w-sm mx-auto">
@@ -84,7 +75,7 @@ export function SignUpForm() {
             required
           />
           <Label htmlFor="password">Password</Label>
-          <PasswordInput />
+          <PasswordInput onChange={(e) => setPassword(e.target.value)} />
           <Button type="submit" className="w-full">
             Sign Up
           </Button>
@@ -115,9 +106,9 @@ export function SignUpForm() {
       </div>
       <div className="mt-4 text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="/sign-in" className="underline underline-offset-4">
+        <Link href="/sign-in" className="underline underline-offset-4">
           Sign in
-        </a>
+        </Link>
       </div>
     </div>
   );

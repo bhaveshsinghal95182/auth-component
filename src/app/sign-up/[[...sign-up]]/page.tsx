@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { SignUpForm } from "@/components/sign-up/signup-form";
 import {
   Card,
