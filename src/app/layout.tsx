@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ModeToggle } from "@/components/theme-toggle";
 import { Analytics } from "@vercel/analytics/next";
+import Navbar from "@/components/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +33,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ClerkProvider>
-            <nav className="fixed z-50 ml-auto p-4">
-              <ModeToggle />
-            </nav>
+            <Navbar />
             {children}
             <Analytics />
           </ClerkProvider>
