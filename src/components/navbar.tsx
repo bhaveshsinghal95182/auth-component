@@ -18,7 +18,7 @@ export default function Navbar() {
             target="_blank"
             className="group relative pb-1 text-sm font-medium"
           >
-            Gumroad Link
+            Gumroad Link (free)
             <span
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-0 -bottom-0.5 h-px w-full origin-center scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:scale-x-100"
