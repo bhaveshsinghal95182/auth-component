@@ -24,6 +24,17 @@ export default function Navbar() {
               className="pointer-events-none absolute inset-x-0 -bottom-0.5 h-px w-full origin-center scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:scale-x-100"
             />
           </Link>
+          <Link
+            href="https://github.com/bhaveshsinghal95182/auth-component.git"
+            target="_blank"
+            className="group relative pb-1 text-sm font-medium"
+          >
+            Github Link
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 -bottom-0.5 h-px w-full origin-center scale-x-0 bg-current transition-transform duration-300 ease-out group-hover:scale-x-100"
+            />
+          </Link>
         </div>
         <ModeToggle />
       </div>
