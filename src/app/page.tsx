@@ -7,10 +7,12 @@ export default function Home() {
       <div className="max-w-xl">
         <h1 className="text-2xl font-semibold mb-2">Custom Clerk Auth Flows</h1>
         <p className="text-sm text-gray-600">
-          This project provides reusable components and hooks to build custom authentication flows
-          with Clerk, so you can avoid using Clerk's prebuilt UI components and fully control the
-          look and behavior of your auth pages. The full source is available via the GitHub link
-          in the navbar — and if you find this useful, donations are welcome on Gumroad.
+          This project provides reusable components and hooks to build custom
+          authentication flows with Clerk, so you can avoid using Clerk&apos;s
+          prebuilt UI components and fully control the look and behavior of your
+          auth pages. The full source is available via the GitHub link in the
+          navbar — and if you find this useful, donations are welcome on
+          Gumroad.
         </p>
       </div>
 
