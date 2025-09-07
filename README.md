@@ -1,4 +1,4 @@
-# Clerk Custom Auth Component — README
+# Clerk Custom Auth Component - README
 
 This repository contains a small Next.js + TypeScript example of custom authentication flows built on top of Clerk. It is intentionally componentized so you can modify and replace the hooks and UI to create your own sign-in and sign-up experiences.
 
@@ -22,26 +22,19 @@ pnpm dev
 
 3. Open http://localhost:3000 and use the sign-in / sign-up pages.
 
-Note: This repo is a UI wrapper around Clerk flows — you must configure Clerk environment variables as you would in any Next.js app (see your Clerk dashboard). If you don't have keys set, the UI will still compile but authentication calls will fail.
-
-## Checklist (requirements extracted)
-- Provide a detailed README explaining how to modify / create hooks and components for sign-in / sign-up. — Done
-- Describe hook and component contracts (inputs/outputs). — Done
-- Provide examples, edge cases, tests and run instructions. — Done
-
-If any of the above items need more detail, tell me which part you'd like expanded and I'll update this file.
+Note: This repo is a UI wrapper around Clerk flows - you must configure Clerk environment variables as you would in any Next.js app (see your Clerk dashboard). If you don't have keys set, the UI will still compile but authentication calls will fail.
 
 ## Project structure (where to look)
 
-- `src/components/` — UI and composite components.
-  - `sign-in/` — `signin-form.tsx`, `reset-password-form.tsx`
-  - `sign-up/` — `signup-form.tsx`
-  - `ui/` — small primitive components: `button.tsx`, `input.tsx`, `label.tsx`, `card.tsx`, `password-input.tsx`, `dropdown-menu.tsx`
+- `src/components/` - UI and composite components.
+  - `sign-in/` - `signin-form.tsx`, `reset-password-form.tsx`
+  - `sign-up/` - `signup-form.tsx`
+  - `ui/` - small primitive components: `button.tsx`, `input.tsx`, `label.tsx`, `card.tsx`, `password-input.tsx`, `dropdown-menu.tsx`
   - `oauth-button.tsx`, `navbar.tsx`, `theme-*` and helpers
-- `src/hooks/` — logic hooks you should extend or replace.
-  - `sign-in/` — `use-sign-in.ts`, `use-reset-password.ts`
-  - `sign-up/` — `use-signup-flow.ts`
-  - `use-error-message.ts` — shared error parsing and messaging
+- `src/hooks/` - logic hooks you should extend or replace.
+  - `sign-in/` - `use-sign-in.ts`, `use-reset-password.ts`
+  - `sign-up/` - `use-signup-flow.ts`
+  - `use-error-message.ts` - shared error parsing and messaging
 
 Treat `components` as presentation and `hooks` as behavior/state. You can safely replace any file with your own implementation as long as you keep its public contract.
 
@@ -76,7 +69,7 @@ Below are simple contracts you can follow when implementing or swapping hooks. K
     - error: Error | null
   }
 
-These are recommended shapes — if you change them, update the components in `src/components/sign-in` and `src/components/sign-up` accordingly.
+These are recommended shapes - if you change them, update the components in `src/components/sign-in` and `src/components/sign-up` accordingly.
 
 ## How to create or modify a hook
 
@@ -170,6 +163,7 @@ If you add or change public hook exports, update tests to import the new names.
 
 1. Add a small component in `src/components` (e.g., `my-oauth.tsx`) that calls Clerk's OAuth start endpoint.
 2. Reuse `src/components/oauth-button.tsx` styles or import the UI primitives.
+3. Just reuse the button component based on your provider by updating `oauth_<provider>`.
 
 ## Recommended next steps (small, low-risk improvements)
 

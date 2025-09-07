@@ -11,7 +11,7 @@ export default function Home() {
           authentication flows with Clerk, so you can avoid using Clerk&apos;s
           prebuilt UI components and fully control the look and behavior of your
           auth pages. The full source is available via the GitHub link in the
-          navbar — and if you find this useful, donations are welcome on
+          navbar - and if you find this useful, donations are welcome on
           Gumroad.
         </p>
       </div>
